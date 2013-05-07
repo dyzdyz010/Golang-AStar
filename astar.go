@@ -31,60 +31,15 @@ func setDest(s *Scene) {
 	}
 }
 
-func addToOpenList(p utils.Point) {
-	updateWeight(&p)
-	if checkExist(p, closeList) {
-		return
-	}
-	if !checkExist(p, openList) {
-		openList = append(openList, p)
-	} else {
-		if openList[findPoint(p, openList)].F > p.F { //New path found
-			openList[findPoint(p, openList)].Parent = p.Parent
-		}
-	}
-}
-
-// Update G, H, F of the point
-func updateWeight(p *utils.Point) {
-	if checkRelativePos(*p) == 1 {
-		p.G = p.Parent.G + 10
-	} else {
-		p.G = p.Parent.G + 14
-	}
-	absx := (int)(math.Abs((float64)(dest.X - p.X)))
-	absy := (int)(math.Abs((float64)(dest.Y - p.Y)))
-	p.H = (absx + absy) * 10
-	p.F = p.G + p.H
-}
-
-func removeFromOpenList(p utils.Point) {
-	index := findPoint(p, openList)
-	if index == -1 {
-		os.Exit(0)
-	}
-	openList = append(openList[:index], openList[index+1:]...)
-}
-
-func addToCloseList(p utils.Point, s *Scene) {
-	if (p.X == dest.X) && (p.Y == dest.Y) {
-		generatePath(p, s)
-		s.draw()
-		os.Exit(1)
-	}
-	if s.scene[p.X][p.Y] != 'A' {
-		s.scene[p.X][p.Y] = '·'
-	}
-	removeFromOpenList(p)
-	closeList = append(closeList, p)
-}
-
-func initLists(s *Scene) {
+// Init origin, destination. Put the origin point into the openlist by the way
+func initAstar(s *Scene) {
+	setOrig(s)
+	setDest(s)
 	openList = append(openList, origin)
 }
 
 func findPath(s *Scene) {
-	current := getZMin()
+	current := getFMin()
 	addToCloseList(current, s)
 	walkable := getWalkable(current, s)
 	for _, p := range walkable {
@@ -92,7 +47,7 @@ func findPath(s *Scene) {
 	}
 }
 
-func getZMin() utils.Point {
+func getFMin() utils.Point {
 	if len(openList) == 0 {
 		fmt.Println("No way!!!")
 		os.Exit(-1)
@@ -144,6 +99,62 @@ func getWalkable(p utils.Point, s *Scene) []utils.Point {
 	return around
 }
 
+func addToOpenList(p utils.Point) {
+	updateWeight(&p)
+	if checkExist(p, closeList) {
+		return
+	}
+	if !checkExist(p, openList) {
+		openList = append(openList, p)
+	} else {
+		if openList[findPoint(p, openList)].F > p.F { //New path found
+			openList[findPoint(p, openList)].Parent = p.Parent
+		}
+	}
+}
+
+// Update G, H, F of the point
+func updateWeight(p *utils.Point) {
+	if checkRelativePos(*p) == 1 {
+		p.G = p.Parent.G + 10
+	} else {
+		p.G = p.Parent.G + 14
+	}
+	absx := (int)(math.Abs((float64)(dest.X - p.X)))
+	absy := (int)(math.Abs((float64)(dest.Y - p.Y)))
+	p.H = (absx + absy) * 10
+	p.F = p.G + p.H
+}
+
+func removeFromOpenList(p utils.Point) {
+	index := findPoint(p, openList)
+	if index == -1 {
+		os.Exit(0)
+	}
+	openList = append(openList[:index], openList[index+1:]...)
+}
+
+func addToCloseList(p utils.Point, s *Scene) {
+	removeFromOpenList(p)
+	if (p.X == dest.X) && (p.Y == dest.Y) {
+		generatePath(p, s)
+		s.draw()
+		os.Exit(1)
+	}
+	// if (p.Parent != nil) && (checkRelativePos(p) == 2) {
+	// 	parent := p.Parent
+	// 	//rdblck := s.scene[p.X][parent.Y] | s.scene[parent.X][p.Y]
+	// 	//fmt.Printf("%c\n", rdblck)
+	// 	if (s.scene[p.X][parent.Y] == '#') || (s.scene[parent.X][p.Y] == '#') {
+	// 		return
+	// 	}
+	// }
+	if s.scene[p.X][p.Y] != 'A' {
+		s.scene[p.X][p.Y] = '·'
+	}
+	closeList = append(closeList, p)
+}
+
 func checkExist(p utils.Point, arr []utils.Point) bool {
 	for _, point := range arr {
 		if p.X == point.X && p.Y == point.Y {
@@ -164,7 +175,7 @@ func findPoint(p utils.Point, arr []utils.Point) int {
 }
 
 func checkRelativePos(p utils.Point) int {
-	parent := *(p.Parent)
+	parent := p.Parent
 	hor := (int)(math.Abs((float64)(p.X - parent.X)))
 	ver := (int)(math.Abs((float64)(p.Y - parent.Y)))
 	return hor + ver

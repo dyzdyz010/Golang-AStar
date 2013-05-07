@@ -11,9 +11,7 @@ func main() {
 	var scene Scene
 	scene.initScene(23, 70)
 	scene.addWalls(10)
-	setOrig(&scene)
-	setDest(&scene)
-	initLists(&scene)
+	initAstar(&scene)
 
 	for {
 		//utils.Clear()
