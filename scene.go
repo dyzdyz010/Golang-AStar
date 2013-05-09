@@ -1,9 +1,9 @@
 package main
 
 import (
+	"a-star/term"
 	"a-star/utils"
 	"fmt"
-	"term"
 )
 
 type Scene struct {
