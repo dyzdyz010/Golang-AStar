@@ -1,9 +1,6 @@
 package main
 
 import (
-	//"a-star/utils"
-
-	//"fmt"
 	"time"
 )
 
@@ -14,9 +11,8 @@ func main() {
 	initAstar(&scene)
 
 	for {
-		//utils.Clear()
 		findPath(&scene)
 		scene.draw()
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(50 * time.Millisecond)
 	}
 }

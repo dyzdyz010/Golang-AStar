@@ -1,9 +1,9 @@
 package main
 
 import (
-	"a-star/term"
-	"a-star/utils"
 	"fmt"
+	"github.com/dyzdyz010/Golang-AStar/term"
+	"github.com/dyzdyz010/Golang-AStar/utils"
 )
 
 type Scene struct {
