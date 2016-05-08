@@ -1,8 +1,8 @@
 package main
 
 import (
-	"a-star/utils"
 	"fmt"
+	"github.com/dyzdyz010/Golang-AStar/utils"
 	"math"
 	"os"
 )
