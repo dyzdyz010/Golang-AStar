@@ -9,3 +9,8 @@ Usage
 ```bash
 go run *.go
 ```
+
+LICENSE
+------
+
+See `LICENSE` for details.
