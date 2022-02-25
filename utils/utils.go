@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Point - path point structure
 type Point struct {
 	X, Y    int
 	H, G, F int
@@ -23,6 +24,7 @@ func init() {
 	r = rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
+// Clear - clear the scene
 func Clear() {
 	fmt.Printf("\033[100B")
 	for i := 0; i < 100; i++ {
@@ -31,6 +33,7 @@ func Clear() {
 	}
 }
 
+// GetRandInt - get random integer in range [0, limit)
 func GetRandInt(limit int) int {
 	return r.Intn(limit)
 }
