@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/dyzdyz010/Golang-AStar/utils"
 	"math"
 	"os"
+
+	"github.com/dyzdyz010/Golang-AStar/utils"
 )
 
 var origin, dest utils.Point
@@ -12,7 +13,7 @@ var openList, closeList, path []utils.Point
 
 // Set the origin point
 func setOrig(s *Scene) {
-	origin = utils.Point{utils.GetRandInt(s.rows-2) + 1, utils.GetRandInt(s.cols-2) + 1, 0, 0, 0, nil}
+	origin = utils.Point{X: utils.GetRandInt(s.rows-2) + 1, Y: utils.GetRandInt(s.cols-2) + 1, H: 0, G: 0, F: 0, Parent: nil}
 	if s.scene[origin.X][origin.Y] == ' ' {
 		s.scene[origin.X][origin.Y] = 'A'
 	} else {
@@ -22,7 +23,7 @@ func setOrig(s *Scene) {
 
 // Set the destination point
 func setDest(s *Scene) {
-	dest = utils.Point{utils.GetRandInt(s.rows-2) + 1, utils.GetRandInt(s.cols-2) + 1, 0, 0, 0, nil}
+	dest = utils.Point{X: utils.GetRandInt(s.rows-2) + 1, Y: utils.GetRandInt(s.cols-2) + 1, H: 0, G: 0, F: 0, Parent: nil}
 
 	if s.scene[dest.X][dest.Y] == ' ' {
 		s.scene[dest.X][dest.Y] = 'B'
@@ -73,28 +74,28 @@ func getWalkable(p utils.Point, s *Scene) []utils.Point {
 	leftdown := s.scene[row+1][col-1]
 	rightdown := s.scene[row+1][col+1]
 	if (left == ' ') || (left == 'B') {
-		around = append(around, utils.Point{row, col - 1, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row, Y: col - 1, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	if (leftup == ' ') || (leftup == 'B') {
-		around = append(around, utils.Point{row - 1, col - 1, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row - 1, Y: col - 1, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	if (up == ' ') || (up == 'B') {
-		around = append(around, utils.Point{row - 1, col, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row - 1, Y: col, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	if (rightup == ' ') || (rightup == 'B') {
-		around = append(around, utils.Point{row - 1, col + 1, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row - 1, Y: col + 1, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	if (right == ' ') || (right == 'B') {
-		around = append(around, utils.Point{row, col + 1, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row, Y: col + 1, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	if (rightdown == ' ') || (rightdown == 'B') {
-		around = append(around, utils.Point{row + 1, col + 1, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row + 1, Y: col + 1, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	if (down == ' ') || (down == 'B') {
-		around = append(around, utils.Point{row + 1, col, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row + 1, Y: col, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	if (leftdown == ' ') || (leftdown == 'B') {
-		around = append(around, utils.Point{row + 1, col - 1, 0, 0, 0, &p})
+		around = append(around, utils.Point{X: row + 1, Y: col - 1, H: 0, G: 0, F: 0, Parent: &p})
 	}
 	return around
 }
